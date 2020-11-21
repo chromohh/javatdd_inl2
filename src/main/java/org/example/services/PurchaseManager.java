@@ -13,7 +13,7 @@ public class PurchaseManager implements IPurchaseManager{
     @Override
     //Todo
     public float sumOfMonth(int year, int month) {
-        return 0;
+        return 5;
     }
 
     @Override

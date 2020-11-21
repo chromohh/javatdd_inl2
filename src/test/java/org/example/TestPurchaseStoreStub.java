@@ -52,10 +52,12 @@ public class TestPurchaseStoreStub {
     @AfterEach
     public void closeTest(){
         stub = null;
+
         purchase1 = null;
         purchase2 = null;
         purchase3 = null;
         purchase4 = null;
+
         category1 = null;
         category2 = null;
         category3 = null;
