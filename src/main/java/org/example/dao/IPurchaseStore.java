@@ -26,6 +26,6 @@ public interface IPurchaseStore {
     /**
      * Get all categories.
      * @returnCategories.
-     */
+      */
     Category[] getAllCategories();
 }
