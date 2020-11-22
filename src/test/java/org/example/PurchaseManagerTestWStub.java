@@ -80,9 +80,8 @@ public class PurchaseManagerTestWStub {
 
     @Test
     public void testSumOfMonth(){
-        //Months as index, 0 - 11, could easily be hotfixed
-        assertEquals(1000, purchaseManager.sumOfMonth(2012, 0));
-        assertEquals(100, purchaseManager.sumOfMonth(2010, 4));
+        assertEquals(1000, purchaseManager.sumOfMonth(2012, 1));
+        assertEquals(100, purchaseManager.sumOfMonth(2010, 5));
     }
 
     @Test
@@ -97,6 +96,18 @@ public class PurchaseManagerTestWStub {
 
     @Test
     public void testMontlyAverage(){
+        float[] expected1 = {0, 0, 200, 100, 100, 0, 0 , 0 , 0 , 0 , 0, 0};
+        float[] expected2 = {1000, 0, 0, 0, 0, 0, 0 , 0 , 0 , 0 , 0, 0};
+
+        assertArrayEquals(expected1, purchaseManager.monthlyAverage(2010));
+        assertArrayEquals(expected2, purchaseManager.monthlyAverage(2012));
+    }
+
+    @Test
+    public void testMontlyAverageOnEmptyYear(){
+        float[] expected1 = {0, 0, 0, 0, 0, 0, 0 , 0 , 0 , 0 , 0, 0};
+
+        assertArrayEquals(expected1, purchaseManager.monthlyAverage(1843));
     }
 
 }
