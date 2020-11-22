@@ -1,6 +1,7 @@
 package org.example.services;
 
 import org.example.dao.PurchaseStore;
+import org.example.entity.Category;
 import org.example.entity.Purchase;
 
 import java.util.Calendar;
@@ -43,6 +44,7 @@ public class PurchaseManager implements IPurchaseManager{
             float[] returnArr = new float[12];
             Purchase[] purchaseArr = purchaseStore.getPurchase(startDate, endDate);
 
+            // Could probably be replaced with switch statement to only iterate once
             for(int i = 0; i < returnArr.length; i++){
                 float sum = 0;
 
@@ -64,8 +66,34 @@ public class PurchaseManager implements IPurchaseManager{
     }
 
     @Override
-    //Todo
     public float[] yearlyAveragePerCategory(int year) {
-        return new float[0];
+        try{
+            Category[] categories = purchaseStore.getAllCategories();
+            float[] retArr = new float[categories.length];
+
+            Date startDate = new Date(year, Calendar.JANUARY, 0);
+            Date endDate = new Date(year + 1, Calendar.JANUARY, 0);
+            Purchase[] purchases = purchaseStore.getPurchase(startDate, endDate);
+
+            int currentIndex = 0;
+            for(Category category : categories){
+
+                float sum = 0;
+
+                for(Purchase purchase : purchases){
+                    if(purchase.getCategoryId() == category.getId()){
+                        sum += purchase.getAmount();
+                    }
+                }
+
+                retArr[currentIndex] = sum;
+
+                currentIndex++;
+            }
+
+            return retArr;
+        }catch(Exception e){
+            throw new NullPointerException();
+        }
     }
 }

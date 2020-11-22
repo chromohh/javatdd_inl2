@@ -42,7 +42,7 @@ public class TestPurchaseStoreStub {
 
         category1 = new Category(0, "cat1");
         category2 = new Category(1, "cat2");
-        category3 = new Category(0, "cat3");
+        category3 = new Category(2, "cat3");
 
         stub.addCategory(category1);
         stub.addCategory(category2);

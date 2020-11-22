@@ -14,8 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PurchaseManagerTestWStub {
 
-    private PurchaseManager purchaseManager;
-    private PurchaseStoreStub stub;
+    PurchaseManager purchaseManager;
+    PurchaseStoreStub stub;
 
     Purchase purchase1;
     Purchase purchase2;
@@ -42,7 +42,7 @@ public class PurchaseManagerTestWStub {
 
         purchase1 = new Purchase(0, d1, 200,"comment1",0);
         purchase2 = new Purchase(1, d2, 100, "comment2", 2);
-        purchase3 = new Purchase(2, d3, 100, "comment3", 1);
+        purchase3 = new Purchase(2, d3, 100, "comment3", 2);
         purchase4 = new Purchase(3, d4, 500, "comment4", 2);
         purchase5 = new Purchase(4, d5, 200, "comment5", 0);
         purchase6 = new Purchase(5, d6, 300, "comment6", 1);
@@ -56,7 +56,7 @@ public class PurchaseManagerTestWStub {
 
         category1 = new Category(0, "cat1");
         category2 = new Category(1, "cat2");
-        category3 = new Category(0, "cat3");
+        category3 = new Category(2, "cat3");
 
         stub.addCategory(category1);
         stub.addCategory(category2);
@@ -109,5 +109,22 @@ public class PurchaseManagerTestWStub {
 
         assertArrayEquals(expected1, purchaseManager.monthlyAverage(1843));
     }
+
+    @Test
+    public void testYearlyAveragePerCategory(){
+        float[] expected1 = {200,300,500};
+        float[] expected2 = {200,0,200};
+
+        assertArrayEquals(expected1, purchaseManager.yearlyAveragePerCategory(2012));
+        assertArrayEquals(expected2, purchaseManager.yearlyAveragePerCategory(2010));
+    }
+
+    @Test
+    public void testYearlyAveragePerCategoryNonExistingYear(){
+        float[] expected1 = {0,0,0};
+
+        assertArrayEquals(expected1, purchaseManager.yearlyAveragePerCategory(4));
+    }
+
 
 }
