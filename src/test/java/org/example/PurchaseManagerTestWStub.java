@@ -1,6 +1,8 @@
 package org.example;
 import org.example.entity.Category;
 import org.example.entity.Purchase;
+import org.example.exceptions.NonExistingMonthException;
+import org.example.exceptions.YearIsInFutureException;
 import org.example.services.PurchaseManager;
 import org.example.stubs.PurchaseStoreStub;
 import org.junit.jupiter.api.AfterEach;
@@ -79,23 +81,23 @@ public class PurchaseManagerTestWStub {
     }
 
     @Test
-    public void testSumOfMonth(){
+    public void testSumOfMonth() throws NonExistingMonthException, YearIsInFutureException {
         assertEquals(1000, purchaseManager.sumOfMonth(2012, 1));
         assertEquals(100, purchaseManager.sumOfMonth(2010, 5));
     }
 
     @Test
-    public void testSumOfNonExistingMonth(){
-        assertEquals(0, purchaseManager.sumOfMonth(1777, 235));
+    public void testSumOfNonExistingMonth() throws NonExistingMonthException {
+        assertThrows(NonExistingMonthException.class, () -> purchaseManager.sumOfMonth(2012, 99));
     }
 
     @Test
-    public void testSumOfNonExistingYear(){
-        assertEquals(0, purchaseManager.sumOfMonth(9999, 0));
+    public void testSumOfNonExistingYear() throws YearIsInFutureException{
+        assertThrows(YearIsInFutureException.class, () -> purchaseManager.sumOfMonth(9999, 12));
     }
 
     @Test
-    public void testMontlyAverage(){
+    public void testMontlyAverage() throws YearIsInFutureException {
         float[] expected1 = {0, 0, 200, 100, 100, 0, 0 , 0 , 0 , 0 , 0, 0};
         float[] expected2 = {1000, 0, 0, 0, 0, 0, 0 , 0 , 0 , 0 , 0, 0};
 
@@ -103,15 +105,22 @@ public class PurchaseManagerTestWStub {
         assertArrayEquals(expected2, purchaseManager.monthlyAverage(2012));
     }
 
+
     @Test
-    public void testMontlyAverageOnEmptyYear(){
+    public void testMontlyAverageOnEmptyYear() throws YearIsInFutureException {
         float[] expected1 = {0, 0, 0, 0, 0, 0, 0 , 0 , 0 , 0 , 0, 0};
 
         assertArrayEquals(expected1, purchaseManager.monthlyAverage(1843));
     }
 
     @Test
-    public void testYearlyAveragePerCategory(){
+    public void testMontlyAverageOnFutureYear() throws YearIsInFutureException {
+        assertThrows(YearIsInFutureException.class, () -> purchaseManager.monthlyAverage(9999));
+    }
+
+
+    @Test
+    public void testYearlyAveragePerCategory() throws YearIsInFutureException {
         float[] expected1 = {200,300,500};
         float[] expected2 = {200,0,200};
 
@@ -120,11 +129,15 @@ public class PurchaseManagerTestWStub {
     }
 
     @Test
-    public void testYearlyAveragePerCategoryNonExistingYear(){
+    public void testYearlyAveragePerCategoryNonExistingYear() throws YearIsInFutureException {
         float[] expected1 = {0,0,0};
 
         assertArrayEquals(expected1, purchaseManager.yearlyAveragePerCategory(4));
     }
 
+    @Test
+    public void testYearlyAveragePerCategoryFutureYear() throws YearIsInFutureException {
+        assertThrows(YearIsInFutureException.class, () -> purchaseManager.yearlyAveragePerCategory(9999));
+    }
 
 }

@@ -95,7 +95,6 @@ public class TestPurchaseStoreStub {
         Purchase[] expected = {};
         Date startDate = new Date(2010, Calendar.JANUARY, 1);
         Date endDate = new Date(2013, Calendar.JANUARY, 1);
-
         assertArrayEquals(expected, stub.getPurchasesByCategory(startDate, endDate, 9));
     }
 

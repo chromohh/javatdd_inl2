@@ -3,7 +3,10 @@ package org.example.services;
 import org.example.dao.PurchaseStore;
 import org.example.entity.Category;
 import org.example.entity.Purchase;
+import org.example.exceptions.NonExistingMonthException;
+import org.example.exceptions.YearIsInFutureException;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -16,7 +19,16 @@ public class PurchaseManager implements IPurchaseManager{
     }
 
     @Override
-    public float sumOfMonth(int year, int month) {
+    public float sumOfMonth(int year, int month) throws NonExistingMonthException, YearIsInFutureException {
+
+        if(month > 12 || month < 1){
+            throw new NonExistingMonthException();
+        }
+
+        if(LocalDate.now().getYear() <= year){
+            throw new YearIsInFutureException();
+        }
+
         try {
             Date startDate = new Date(year, month - 1, 0);
             Date endDate = new Date(year, month, 0);
@@ -36,7 +48,11 @@ public class PurchaseManager implements IPurchaseManager{
     }
 
     @Override
-    public float[] monthlyAverage(int year) {
+    public float[] monthlyAverage(int year) throws YearIsInFutureException {
+        if(LocalDate.now().getYear() <= year){
+            throw new YearIsInFutureException();
+        }
+
         try{
             Date startDate = new Date(year, Calendar.JANUARY, 0);
             Date endDate = new Date(year + 1, Calendar.JANUARY, 0);
@@ -66,7 +82,12 @@ public class PurchaseManager implements IPurchaseManager{
     }
 
     @Override
-    public float[] yearlyAveragePerCategory(int year) {
+    public float[] yearlyAveragePerCategory(int year) throws YearIsInFutureException {
+
+        if(LocalDate.now().getYear() < year){
+            throw new YearIsInFutureException();
+        }
+
         try{
             Category[] categories = purchaseStore.getAllCategories();
             float[] retArr = new float[categories.length];
